@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes import prices, market, portfolio, trades, news, alerts, chat, backtest, whale
+from dotenv import load_dotenv
 import uvicorn
 
+load_dotenv()
 app = FastAPI(title="Crypto Trading API", version="1.0.0")
 
 # Enable CORS for Next.js frontend

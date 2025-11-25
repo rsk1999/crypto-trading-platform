@@ -8,7 +8,14 @@ class ChatRequest(BaseModel):
     message: str
 
 # Initialize Google Gemini
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDsHbGMBCIB4K3k_75EjejkE9GtxJTkxa4")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    print("⚠️  WARNING: GEMINI_API_KEY not found in environment variables!")
+    print("⚠️  Please create a .env file in the backend directory with your API key")
+    USE_AI = False
+else:
+
 
 try:
     import google.generativeai as genai
