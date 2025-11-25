@@ -15,55 +15,53 @@ if not GEMINI_API_KEY:
     print("⚠️  Please create a .env file in the backend directory with your API key")
     USE_AI = False
 else:
-
-
-try:
-    import google.generativeai as genai
-    genai.configure(api_key=GEMINI_API_KEY)
-    
-    # List available models to see what's accessible
-    print("🔍 Checking available Gemini models...")
-    available_models = []
     try:
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods:
-                # Skip experimental models (they have lower quotas)
-                if '-exp' not in m.name:
-                    available_models.append(m.name)
-                    print(f"  ✓ {m.name}")
-                else:
-                    print(f"  ⊘ {m.name} (experimental - skipped)")
-    except:
-        pass
-    
-    # Prefer stable models in this order
-    preferred_models = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
-    
-    # Try to use preferred models first
-    model_to_use = None
-    for pref in preferred_models:
-        for avail in available_models:
-            if pref in avail:
-                model_to_use = avail.replace('models/', '')
+        import google.generativeai as genai
+        genai.configure(api_key=GEMINI_API_KEY)
+        
+        # List available models to see what's accessible
+        print("🔍 Checking available Gemini models...")
+        available_models = []
+        try:
+            for m in genai.list_models():
+                if 'generateContent' in m.supported_generation_methods:
+                    # Skip experimental models (they have lower quotas)
+                    if '-exp' not in m.name:
+                        available_models.append(m.name)
+                        print(f"  ✓ {m.name}")
+                    else:
+                        print(f"  ⊘ {m.name} (experimental - skipped)")
+        except:
+            pass
+        
+        # Prefer stable models in this order
+        preferred_models = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
+        
+        # Try to use preferred models first
+        model_to_use = None
+        for pref in preferred_models:
+            for avail in available_models:
+                if pref in avail:
+                    model_to_use = avail.replace('models/', '')
+                    break
+            if model_to_use:
                 break
+        
+        # If no preferred model found, use first available
+        if not model_to_use and available_models:
+            model_to_use = available_models[0].replace('models/', '')
+        
         if model_to_use:
-            break
-    
-    # If no preferred model found, use first available
-    if not model_to_use and available_models:
-        model_to_use = available_models[0].replace('models/', '')
-    
-    if model_to_use:
-        model = genai.GenerativeModel(model_to_use)
-        USE_AI = True
-        print(f"✅ Gemini AI initialized with: {model_to_use}")
-    else:
-        raise Exception("No compatible Gemini model found")
-            
-except Exception as e:
-    print(f"❌ Gemini initialization error: {e}")
-    print("⚠️  Falling back to knowledge base mode")
-    USE_AI = False
+            model = genai.GenerativeModel(model_to_use)
+            USE_AI = True
+            print(f"✅ Gemini AI initialized with: {model_to_use}")
+        else:
+            raise Exception("No compatible Gemini model found")
+                
+    except Exception as e:
+        print(f"❌ Gemini initialization error: {e}")
+        print("⚠️  Falling back to knowledge base mode")
+        USE_AI = False
 
 # System prompt for the AI
 SYSTEM_PROMPT = """You are a helpful cryptocurrency and blockchain expert assistant. Your role is to:
