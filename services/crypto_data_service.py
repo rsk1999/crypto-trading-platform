@@ -1,39 +1,3 @@
-import requests
-import numpy as np
-from sklearn.ensemble import RandomForestRegressor
-import time
-import os
-import json
-
-# === CONFIGURATION ===
-# Default key (can be overridden)
-DEFAULT_API_KEY = "CG-S948XtBvbjRux8WKePfdqDed" 
-API_KEY_FILE = os.path.join("data", "api_key.txt")
-
-def get_api_key():
-    """Load API key from file or return default."""
-    if os.path.exists(API_KEY_FILE):
-        try:
-            with open(API_KEY_FILE, "r") as f:
-                key = f.read().strip()
-                if key:
-                    return key
-        except:
-            pass
-    return DEFAULT_API_KEY
-
-def set_api_key(key):
-    """Save API key to file."""
-    os.makedirs(os.path.dirname(API_KEY_FILE), exist_ok=True)
-    with open(API_KEY_FILE, "w") as f:
-        f.write(key.strip())
-
-HEADERS = {"x-cg-pro-api-key": get_api_key()}
-
-# Watchlist coins with their correct CoinGecko IDs
-WATCHED_COINS = ["bitcoin", "ethereum", "pepe"]
-
-# Cache file for coin list
 COIN_LIST_CACHE_FILE = os.path.join("data", "coin_list_cache.json")
 CACHE_EXPIRY_SECONDS = 86400  # 24 hours
 
