@@ -1,0 +1,16 @@
+{
+    "usd_balance": 8651.6,
+    "holdings": {
+        "solana": 10.0
+    },
+    "history": [
+        {
+            "timestamp": 1764086935.07224,
+            "side": "BUY",
+            "coin": "solana",
+            "amount": 10.0,
+            "price": 134.84,
+            "total": 1348.4
+        }
+    ]
+}
